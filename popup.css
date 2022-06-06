@@ -1,0 +1,187 @@
+body,
+html {
+  padding: 0;
+  margin: 0;
+
+  background-color: #667481;
+}
+/* header style start 헤더 스타일 시작*/
+header {
+  position: fixed;
+  width: 100%;
+  height: 32px;
+  display: flex;
+  z-index: 1;
+  background-color: #55606b;
+  font-family: Hack, "나눔스퀘어_ac";
+  font-size: 17px;
+  justify-content: center;
+  align-items: center;
+  color: #ddd;
+  gap: 10px;
+  border-bottom: #ddd solid 1px;
+}
+header > div {
+  cursor: pointer;
+  transition: all ease 0.3s;
+  user-select: none;
+}
+header > div:hover {
+  color: #fff;
+}
+header > div:active {
+  border-radius: 20%;
+  background-color: rgba(65, 65, 65, 0.76);
+}
+/* end header */
+/* 전체 레이아웃을 감싸는 콘테이너 */
+.container {
+  position: relative;
+  background-color: #667481;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  padding-top: 38px;
+  box-sizing: border-box;
+}
+/* input스타일 */
+input {
+  background-color: transparent;
+  border: none;
+  width: 100%;
+  color: #fff;
+  border-bottom: #4b4b4b 1px solid;
+  font-family: Hack, "나눔스퀘어_ac";
+  font-size: 14px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  height: 25px;
+}
+input:focus {
+  border-bottom: #fff 1px solid;
+  outline: none;
+}
+::placeholder {
+  color: #aaa;
+}
+/* end Input Stlye */
+/* start title Input Style */
+.inputTitleWrap {
+  position: relative;
+  display: flex;
+}
+.inputTitle {
+  flex-grow: 1;
+}
+.titleBtnsWrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.titleBtnsWrap > button {
+  background-color: transparent;
+  display: inline-block;
+  font-size: 24px;
+  height: 17px;
+  line-height: 17px;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  transition: all ease 0.3s;
+  border-radius: 30%;
+}
+.titleBtnsWrap > button:hover {
+  color: rgba(255, 255, 255, 0.548);
+}
+.titleBtnsWrap > button:active {
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.151);
+}
+/* end title Input Style */
+/* 문제유형 스타일 시작 */
+.inputSelectOption {
+  background-color: transparent;
+  color: #fff;
+  width: 100%;
+  border: none;
+  border-bottom: #4b4b4b solid 1px;
+  outline: none;
+  cursor: pointer;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-family: Hack, "나눔스퀘어_ac";
+}
+.inputSelectOption > option {
+  color: #4b4b4b;
+  background-color: transparent;
+}
+/* 문제유형 스타일 끝 */
+/* 풀이를 감싸는 콘테이너 (textarea 및 radio button) */
+.answerContainer {
+  position: relative;
+}
+.textArea {
+  background-color: #4b4b4b;
+  max-width: 85%;
+  width: 100%;
+  height: 150px;
+  max-height: 400px;
+  resize: vertical;
+  border: none;
+  color: white;
+  font-size: 14px;
+  font-family: Hack, "나눔스퀘어_ac";
+  outline: none;
+}
+.answerEditorSelector {
+  position: absolute;
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+}
+/* 여기까지가 라디오 및 텍스트에리어 스타일 */
+/* 풀이 추가 버튼 스타일 */
+.addEditorWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  text-align: center;
+  gap: 3px;
+}
+.addEditorWrap > .line {
+  position: relative;
+  height: 2px;
+  background-color: #4b4b4b;
+  flex-grow: 1;
+}
+.addEditorWrap > .plus {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  border: #4b4b4b solid 2px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.addEditorWrap > .plus::after {
+  position: absolute;
+  content: "";
+  width: 90%;
+  height: 2px;
+  background-color: #ddd;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.addEditorWrap > .plus::before {
+  position: absolute;
+  content: "";
+  width: 2px;
+  height: 90%;
+  background-color: #ddd;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+/* 여기까지가 풀이 추가 스타일 */
