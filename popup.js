@@ -34,7 +34,7 @@ const selectOption = document.querySelector(".inputSelectOption");
 //단원 유형 요소
 const subTitle = document.querySelector(".inputSubTitle");
 //주입할 데이터 요소
-const injectData = document.querySelector(".inputInjectionData");
+const injectData = document.querySelector("#injectData");
 //풀이 라디오 버튼
 const answerSelector = document.querySelectorAll(".amswerSelector");
 //풀이추가 버튼
