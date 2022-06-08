@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script type="module">
+      import Module from "./Module/test_module.js";
+      Module().then(function (mymod) {
+        console.dir(mymod);
+        const strSplit = mymod.cwrap("strSplit", "number", [
+          "string",
+          "string",
+        ]);
+        const string = "string_new";
+        const size = mymod.lengthBytesUTF8(string) + 1;
+        let memory = mymod._malloc(size);
+        mymod.stringToUTF8(string, memory, size);
+        const str = mymod._getString();
+        console.log(mymod.lengthBytesUTF8(mymod.UTF8ToString(str)));
+        // var a = strSplit(memory, "_");
+        // console.log(mymod.intArrayFromString(string, false));
+        // console.log(mymod._strSplit("ad", "_"));
+        // console.log(mymod._getString());
+      });
+    </script>
+  </body>
+</html>
+<!-- emcc ./project/C_module/c_module.c -s WASM=1 -O3 -s EXPORTED_FUNCTIONS="['_malloc','_free','_strSplit','_getString']" -s EXPORTED_RUNTIME_METHODS=['ccall','cwrap','stringToUTF8','UTF8ToString','setValue','getValue','lengthBytesUTF8','intArrayToString','intArrayFromString'] -o ./project/test_module.js -s MODULARIZE=1 -s -s EXPORT_ES6=1 -->

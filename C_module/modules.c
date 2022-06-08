@@ -3,6 +3,7 @@ int EMSCRIPTEN_KEEPALIVE increment(int value){
     return (value+1);
 }
 int EMSCRIPTEN_KEEPALIVE decrement(int value){
+    
     return (value-1);
 }
 int EMSCRIPTEN_KEEPALIVE strSplit(int charCode, int deliCode){
@@ -15,6 +16,7 @@ int EMSCRIPTEN_KEEPALIVE strSplit(int charCode, int deliCode){
         return charCode;
     }
 }
+
 int main(){
     return 0;
 }

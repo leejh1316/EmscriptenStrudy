@@ -7,9 +7,10 @@ const popupDataObject = (function () {
       title: {
         value: "",
         valueView: new Uint8Array(),
-        valueArray: [[]],
+        valueArray: [new Uint8Array()],
       },
       subTitle: "",
+      questionsValue: 201,
       injectData: {
         value: "",
         constData: "",
@@ -62,63 +63,16 @@ function load() {}
 // Header data Remove 이벤트
 function remove() {}
 // Title Change 이벤트
-
 function getTitleValue({ target }) {
-  // popupData.title 초기화
   popupData.title.value = target.value;
-  popupData.title.valueArray = [new Uint8Array()];
   popupData.title.valueView = textEncoder.encode(popupData.title.value);
-  // 구분자 유니코드 선언
-  const delimit = "_".charCodeAt();
-  // 각 버퍼 사이즈 정하기
-  const bufferSize = getUnit8ArrayLenght(popupData.title.valueView, delimit);
-  // 각 인덱스 번호 설정
-  let indexBufferSize = 0;
-  let indexBufferArray = 0;
-  let indexValueArray = 0;
-  // 초기 버퍼 사이즈
-  let bufferArray = new Uint8Array(
-    new ArrayBuffer(bufferSize[indexBufferSize])
+  popupData.title.valueArray = getUnit8ArraySplit(
+    popupData.title.valueView,
+    "_",
+    getUnit8ArrayLength(popupData.title.valueView, "_")
   );
-  for (const letterCode of popupData.title.valueView) {
-    // C에서 컴파일한 함수 _strSplit()
-    //_strSplit(int charCode, int delimitCode) -> delimit과 같을때 0 반환
-    const strSplitReturnCode = _strSplit(letterCode, delimit);
-    if (!strSplitReturnCode) {
-      // 데이터 저장
-      popupData.title.valueArray[indexValueArray] =
-        textDecoder.decode(bufferArray);
-      popupData.title.valueArray.push(new Uint8Array());
-      // 인덱스 번호 늘리기
-      indexValueArray++;
-      indexBufferSize++;
-      // 버퍼 인덱스 초기화
-      indexBufferArray = 0;
-      // 버퍼 사이즈 재조정
-      bufferArray = new Uint8Array(
-        new ArrayBuffer(bufferSize[indexBufferSize])
-      );
-    } else {
-      // 구분자가 아닐때 버퍼에 추가
-      bufferArray[indexBufferArray] = letterCode;
-      indexBufferArray++;
-    }
-  }
-  // foo_"01" : 여기서 01부분은 위 반복문에서 작동안함 -> 구분자가 뒤에 나올때만 실행하기 떄문 그래서 아래처럼 맨 마지막도 적용하기위해 코드 작성
-  popupData.title.valueArray[indexValueArray] = textDecoder.decode(bufferArray);
-  // console.log(popupData.title);
+  console.log(popupData.title);
 }
-
-// function getTitleValue({ target }) {
-//   popupData.title.value = target.value;
-//   popupData.title.valueView = textEncoder.encode(popupData.title.value);
-//   popupData.title.valueArray = getUnit8ArraySplit(
-//     popupData.title.valueView,
-//     "_",
-//     getUnit8ArrayLenght(popupData.title.valueView, "_")
-//   );
-//   console.log(popupData.title);
-// }
 // Title Increment 이벤트
 // _01 -> +1 씩 추가 (문자열의 마지막 _01 인식)
 function increment() {
@@ -147,11 +101,42 @@ function decrement() {
 function getSubTitle({ target }) {
   popupData.subTitle = target.value;
 }
+// 문제유형 값 가져오기
+function getSelectValue({ target }) {
+  popupData.questionsValue = target.value;
+  console.log(popupData);
+}
 // injectData 값 가져오기
 function getInjectData({ target }) {
+  let viewData = undefined;
+  let old = undefined;
+  let now = undefined;
+  old = new Date().getTime();
+  popupData.injectData.value = textEncoder.encode(target.value);
+  viewData = getUnit8ArraySplit(
+    popupData.injectData.value,
+    "_",
+    getUnit8ArrayLength(popupData.injectData.value, "_")
+  ).map((str) => {
+    str = textEncoder.encode(str);
+    return getUnit8ArraySplit(str, ",", getUnit8ArrayLength(str, ","));
+  });
+  console.log(viewData);
+  // console.log(popupData.injectData);
+  now = new Date().getTime();
+  console.log(now - old + "ms");
+  viewData = undefined;
+  popupData.injectData.value = undefined;
+  old = undefined;
+  now = undefined;
+  old = new Date().getTime();
   popupData.injectData.value = target.value;
-  console.log();
-  console.log(popupData.injectData);
+  viewData = popupData.injectData.value.split("_").map((str) => {
+    return str.split(",");
+  });
+  console.log(viewData);
+  now = new Date().getTime();
+  console.log(now - old + "ms");
 }
 // 풀이 추가 이벤트
 function apendEditor() {}
@@ -161,12 +146,18 @@ Title.input.addEventListener("change", getTitleValue);
 Title.increment.addEventListener("click", increment);
 Title.decrement.addEventListener("click", decrement);
 subTitle.addEventListener("change", getSubTitle);
+selectOption.addEventListener("change", getSelectValue);
 injectData.addEventListener("change", getInjectData);
+
 // 기타 기능
-//  Unit8Array 타입인 배열 구분자에 따라 길이 반환 (ex: 구분자 "_" 일때 -> ABC_DE -> [3,2] 반환)
-function getUnit8ArrayLenght(unit8arrayText, delimitCode) {
+// 사용법 : getUnit8ArrayLength(Encoding된 문장 또는 String, 유니코드값 또는 String 한문자)
+// ->반환값 : getUnit8ArrayLength("가나다_라_마바","_") -> return : [3,1,2]
+function getUnit8ArrayLength(unit8arrayText, delimitCode) {
   // length 변수의 길이는 split된 개수, 배열 데이터값은 split된 문자열의 길이
   // ex 114,112,123,95,123,111,223,212
+  if (!(unit8arrayText instanceof Uint8Array)) {
+    unit8arrayText = textEncoder.encode(unit8arrayText);
+  }
   // 구분자가 문자열일때 코드로 변환
   if (typeof delimitCode == "string") {
     delimitCode = delimitCode.charCodeAt();
@@ -186,8 +177,15 @@ function getUnit8ArrayLenght(unit8arrayText, delimitCode) {
   length.push(count);
   return length;
 }
-//2개 이상안됨;;
+// 사용법 -> getUnit8ArraySplit(Encoding된 Text 또는 String, 문자 또는 유니코드, 구분자 전까지의 문장의 인코딩된 사이즈 크기 정수형 배열)
+// 반환 -> getUnit8ArraySplit("abcd_ef_g","_",[4,2,1]) -> return : ["abcd","ef","g"]
+// 응용 -> getUnit8ArraySplit("가나,다라_마바_아자,차","_",getUnit8ArrayLength("가나,다라_마바_아자,차","_")).map(str=>{return getUnit8ArraySplit(str,",",getUnit8Arraylength(str,","))})
+// 반환 -> [["가나","다라"],["마바"],["아자,차"]];
+// JS일땐 그냥 "가나,다라_마바_아자,차".split("_").map((str)=>{return str.split(",")})이면 끝
 function getUnit8ArraySplit(unit8arrayText, delimitCode, bufferSize) {
+  if (!(unit8arrayText instanceof Uint8Array)) {
+    unit8arrayText = textEncoder.encode(unit8arrayText);
+  }
   if (typeof delimitCode == "string") {
     delimitCode = delimitCode.charCodeAt();
   }
@@ -205,14 +203,14 @@ function getUnit8ArraySplit(unit8arrayText, delimitCode, bufferSize) {
       newUnit8ArrayText[indexNewUnit8ArrayText] =
         textDecoder.decode(bufferArray);
       newUnit8ArrayText.push(new Uint8Array());
-      bufferArray = new Uint8Array(
-        new ArrayBuffer(bufferSize[indexBufferSize])
-      );
       indexBufferSize++;
       indexNewUnit8ArrayText++;
       indexBufferArray = 0;
+      bufferArray = new Uint8Array(
+        new ArrayBuffer(bufferSize[indexBufferSize])
+      );
     } else {
-      bufferArray[indexBufferArray] = letterCode;
+      bufferArray[indexBufferArray] = strSplitReturnCode;
       indexBufferArray++;
     }
   }
@@ -220,14 +218,6 @@ function getUnit8ArraySplit(unit8arrayText, delimitCode, bufferSize) {
   return newUnit8ArrayText;
 }
 
-// var a = textEncoder.encode("가,나,다,라_마,바,사,아");
-// var b = getUnit8ArraySplit(a, "_", getUnit8ArrayLenght(a, "_"));
-// console.log(
-//   getUnit8ArraySplit(
-//     textEncoder.encode(b[0]),
-//     ",",
-//     getUnit8ArrayLenght(textEncoder.encode(b[0]), ",")
-//   )
-// );
-let a = textEncoder.encode("bbbb");
-console.log(getUnit8ArraySplit(a, "_", [2, 6]));
+// _strSplit(int charCode, int deliCode) -> charCode == delicode 일때 0 반환, 아닐때 charCode 반환
+// _increment(int value) -> return (value+1);
+// _decrment(int value) -> return (value-1);
