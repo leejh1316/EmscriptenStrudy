@@ -20,25 +20,66 @@
           "string",
           "string",
         ]);
-        const testInject = injectSplit("1,2,3,4_5,6,7,8,100", "_", ",");
+        const titleSplit = mymod.cwrap("titleSplit", "number", [
+          "string",
+          "string",
+        ]);
+        const testInject = injectSplit("13,2_막,6,7,8,100,10", "_", ",");
         console.log("----------");
-        // console.log(mymod.UTF8ToString(mymod.getValue(testInject, "i32")));
-        for (let i = 0; i < 100; i++) {
-          console.log(
-            mymod.UTF8ToString(mymod.getValue(testInject + i * 4, "i32"))
-          );
+        let arr1 = [];
+        let arr2 = [];
+        const arr1pointer = mymod.getValue(testInject, "i32");
+        const arr2pointer = mymod.getValue(testInject + 4, "i32");
+        const arr1Length = mymod.getValue(testInject + 8);
+        const arr2Length = mymod.getValue(testInject + 12);
+        console.log("arr1P : ", arr1pointer);
+        console.log("arr2P : ", arr2pointer);
+        console.log("arr1Len : ", arr1Length);
+        console.log("arr2Len : ", arr2Length);
+        // 진짜 제일 중요한 기능임 ㄹㅇ
+        let aLen = mymod.lengthBytesUTF8(mymod.UTF8ToString(arr1pointer)) + 1;
+        for (let i = 0; i < arr1Length; i++) {
+          if (i == 0) {
+            arr1.push(mymod.UTF8ToString(arr1pointer));
+          } else {
+            arr1.push(mymod.UTF8ToString(arr1pointer + aLen));
+            aLen +=
+              mymod.lengthBytesUTF8(mymod.UTF8ToString(arr1pointer + aLen)) + 1;
+          }
         }
-        // const getString = mymod.cwrap("getString", "number", null);
-        // const string = "string_new";
-        // const size = mymod.lengthBytesUTF8(string) + 1;
-        // let memory = mymod._malloc(size);
-        // mymod.stringToUTF8(string, memory, size);
-        // const str = getString();
-        // var len = mymod.lengthBytesUTF8(mymod.UTF8ToString(str));
-        // for (let i = 0; i < 2; i++) {
-        //   var p = mymod.getValue(str + i * 4, "i32");
-        //   console.log(mymod.UTF8ToString(mymod.getValue(str + i * 4, "i32")));
-        // }
+        aLen = mymod.lengthBytesUTF8(mymod.UTF8ToString(arr2pointer)) + 1;
+        for (let i = 0; i < arr2Length; i++) {
+          if (i == 0) {
+            arr2.push(mymod.UTF8ToString(arr2pointer));
+          } else {
+            arr2.push(mymod.UTF8ToString(arr2pointer + aLen));
+            aLen +=
+              mymod.lengthBytesUTF8(mymod.UTF8ToString(arr2pointer + aLen)) + 1;
+          }
+        }
+        mymod._free(testInject);
+        console.log(arr1);
+        console.log(arr2);
+        const pStuTitle = titleSplit("빅토리_클리닉_기본01권_01", "_");
+        const pTitleValue = mymod.getValue(pStuTitle, "i32");
+        const pTitleLength = mymod.getValue(pStuTitle + 4, "i32");
+        let titleUTF8Length =
+          mymod.lengthBytesUTF8(mymod.UTF8ToString(pTitleValue)) + 1;
+        let tArr = [];
+        console.log(mymod.UTF8ToString(pTitleValue));
+        console.log(pTitleLength);
+        for (let i = 0; i < pTitleLength; i++) {
+          if (i == 0) {
+            tArr.push(mymod.UTF8ToString(pTitleValue));
+          } else {
+            tArr.push(mymod.UTF8ToString(pTitleValue + titleUTF8Length));
+            titleUTF8Length +=
+              mymod.lengthBytesUTF8(
+                mymod.UTF8ToString(pTitleValue + titleUTF8Length)
+              ) + 1;
+          }
+        }
+        console.log(tArr);
       });
     </script>
   </body>

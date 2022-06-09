@@ -2,50 +2,46 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-char EMSCRIPTEN_KEEPALIVE *strSplit(char *string, char *delimit){
-    int i=0;
-    char *splitArray[10]= {NULL,};
-    char scopy[50];
-    strcpy(scopy,string);
-    char *splitString = strtok(scopy, delimit);
-    while(splitString != NULL){
-        splitArray[i] = splitString;
+
+int increment(int value){
+    return (value+1);
+}
+int decrement(int value){
+    return (value-1);
+}
+
+typedef struct titleStruct{
+    int pValue1;
+    int pValue1Length;
+} titleStruct;
+titleStruct EMSCRIPTEN_KEEPALIVE *titleSplit(char *titleString, char *delimit){
+    titleStruct *ts = (titleStruct *)malloc(sizeof(titleStruct));
+    char **strings[1][10];
+    char *splitString = strtok(titleString, delimit);
+    int i=0,j=0;
+    while(splitString!=NULL){
+        strings[0][i] = splitString;
         i++;
         splitString = strtok(NULL,delimit);
-    };
-    return splitArray;
+    }
+    ts->pValue1 = strings[0][0];
+    ts->pValue1Length = i;
+    return ts;
 }
+
+// inject C
 typedef struct _pointerSetting{
     int pValue1;
     int pValue2;
+    int pValue1Length;
+    int pValue2Length;
 } setPointer;
-setPointer EMSCRIPTEN_KEEPALIVE *getString(){
-    setPointer *sp = (setPointer *)malloc(sizeof(setPointer));
-    char str[2][30];
-    strcpy(str[0] ,"hello, worldddddddd");
-    strcpy(str[1] ,"emscripten hard");
-    char **s1 = malloc(sizeof(char *)*2);
-    int i=0,j=0;
-    for(i=0;i<2;i++){
-        s1[i] = malloc(sizeof(char)*256);
-    }
-    for(i=0;i<2;i++){
-      strcpy(s1[i],str[i]);
-    }
-    sp->pValue1 = s1[0];
-    sp->pValue2 = s1[1];
-    return sp;
-}
-
-
-
 setPointer EMSCRIPTEN_KEEPALIVE *injectStringSplit(char *injectString, char *delimit, char *delimit2){
     setPointer *sp = (setPointer *)malloc(sizeof(setPointer));
     int i=0,j=0;
     char *strArr[2]= {NULL, };
-    char ***strings = (char ***)malloc(sizeof(char *)*2);
-    strings[0] = (char **)malloc(sizeof(char *)*50);
-    strings[1] = (char **)malloc(sizeof(char *)*50);
+    // strings 크기 사이즈 
+    char **strings[2][50];
     char *splitString = strtok(injectString,delimit);
     while(splitString!=NULL){
         strArr[i] = splitString;
@@ -63,6 +59,11 @@ setPointer EMSCRIPTEN_KEEPALIVE *injectStringSplit(char *injectString, char *del
             strings[i][j] = splitString;
             j++;
             splitString = strtok(NULL, delimit2);
+        }
+        if(i==0){
+            sp->pValue1Length = j;
+        } else{
+            sp->pValue2Length = j;
         }
     }
     // strings check;
