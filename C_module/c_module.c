@@ -36,40 +36,45 @@ setPointer EMSCRIPTEN_KEEPALIVE *getString(){
     sp->pValue2 = s1[1];
     return sp;
 }
-// 최대 입력크기 _ 및 , 포함 250자
-// 최대 동적메모리 크기 [2][length+1];
-// injectData input -> 1,2,3,4_5,6,7,8 -> pointer [1,2,3,4], [5,6,7,8]
-// ex "1,2,3_4,5,6" , "_", ","
 
-// 수정필요 !! 3차원배열로 malloc 할것
-// [["",""]] [0][0] = "abcd" 
+
 
 setPointer EMSCRIPTEN_KEEPALIVE *injectStringSplit(char *injectString, char *delimit, char *delimit2){
     setPointer *sp = (setPointer *)malloc(sizeof(setPointer));
-    int length = strlen(injectString);
-    char copyString[250];
-    // copy = 1,2,3_4,5,6 
-    strcpy(copyString,injectString);
-    // split 1,2,3_4,5,6 "_" -> 1,2,3 
-    char *splitString1 = strtok(copyString,delimit);
-    // 1,2,3 "," -> 1
-    char *splitString2 = strtok(splitString1, delimit2);
-    char **mallocString = malloc(sizeof(char *)*2);
-    mallocString[0] = malloc(sizeof(char)*length+1);
-    mallocString[1] = malloc(sizeof(char)*length+1);
-    int index1=0,index2=0;
-    while(splitString1!=NULL){
-        while(splitString2!=NULL){
-            // strcpy(mallocString[index1][index2],splitString2);
-            mallocString[inedx1][index2] = splitString2;
-            index2++;
-            splitString2 = strtok(NULL,delimit2);
-        }
-        index1++;
-        splitString1 = strtok(NULL,delimit);
+    int i=0,j=0;
+    char *strArr[2]= {NULL, };
+    char ***strings = (char ***)malloc(sizeof(char *)*2);
+    strings[0] = (char **)malloc(sizeof(char *)*50);
+    strings[1] = (char **)malloc(sizeof(char *)*50);
+    char *splitString = strtok(injectString,delimit);
+    while(splitString!=NULL){
+        strArr[i] = splitString;
+        i++;
+        splitString = strtok(NULL,delimit);
     }
-    sp->pValue1 = mallocString[0];
-    sp->pValue2 = mallocString[1];
+    // check;
+    for(i=0;i<2;i++){
+        printf("splitCheck = %s\n",strArr[i]);
+    }
+    for(i=0;i<2;i++){
+        splitString = strtok(strArr[i],delimit2);
+        j=0;
+        while(splitString!=NULL){
+            strings[i][j] = splitString;
+            j++;
+            splitString = strtok(NULL, delimit2);
+        }
+    }
+    // strings check;
+    for(i=0;i<2;i++){
+        j=0;
+        while(strings[i][j]!=NULL){
+            printf("strings[%d][%d] = %s \n", i,j,strings[i][j]);
+            j++;
+        }
+    }
+    sp->pValue1 = strings[0][0];
+    sp->pValue2 = strings[1][0];
     return sp;
 }
 int mina(){

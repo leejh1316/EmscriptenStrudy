@@ -20,12 +20,12 @@
           "string",
           "string",
         ]);
-
-        const pointerInject = injectSplit("1,2,3_4,5,6", "_", ",");
-        console.log(mymod.UTF8ToString(mymod.getValue(pointerInject, "i32")));
-        for (let i = 0; i < 2; i++) {
+        const testInject = injectSplit("1,2,3,4_5,6,7,8,100", "_", ",");
+        console.log("----------");
+        // console.log(mymod.UTF8ToString(mymod.getValue(testInject, "i32")));
+        for (let i = 0; i < 100; i++) {
           console.log(
-            mymod.UTF8ToString(mymod.getValue(pointerInject + i * 4, "i32"))
+            mymod.UTF8ToString(mymod.getValue(testInject + i * 4, "i32"))
           );
         }
         // const getString = mymod.cwrap("getString", "number", null);
