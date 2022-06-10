@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>문항작업 입력폼</title>
     <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
@@ -39,10 +39,15 @@
           placeholder="주입할 데이터 : {c}_{d}"
         />
       </div>
-      <div>
+      <div id="answerDiv">
         <div class="answerContainer">
-          <textarea class="textArea" placeholder="풀이 입력"></textarea>
+          <textarea
+            id="editor1"
+            class="textArea"
+            placeholder="풀이 입력"
+          ></textarea>
           <input
+            id="editorSelect1"
             class="answerEditorSelector"
             type="radio"
             name="answerSelector"
@@ -50,12 +55,26 @@
             checked="true"
           />
         </div>
+        <div class="answerContainer">
+          <textarea
+            id="editor2"
+            class="textArea"
+            placeholder="풀이 입력"
+          ></textarea>
+          <input
+            id="editorSelect2"
+            class="answerEditorSelector"
+            type="radio"
+            name="answerSelector"
+            value="1"
+          />
+        </div>
       </div>
-      <div class="addEditorWrap">
+      <!-- <div class="addEditorWrap">
         <div class="line"></div>
         <div class="plus"></div>
         <div class="line"></div>
-      </div>
+      </div> -->
     </div>
     <script type="module" src="popup.js"></script>
   </body>

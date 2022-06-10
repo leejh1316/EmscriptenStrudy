@@ -1,10 +1,11 @@
 {
-  "name": "Project_OJT",
+  "name": "ProjectOJT",
   "manifest_version": 3,
   "version": "1.0",
-  "permissions": ["activeTab", "scripting"],
+  "permissions": ["activeTab", "scripting", "storage", "tabs"],
   "background": {
     "service_worker": "background.js"
   },
-  "action": {}
+  "action": {},
+  "host_permissions": ["<all_urls>"]
 }

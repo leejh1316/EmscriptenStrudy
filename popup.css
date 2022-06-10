@@ -2,7 +2,8 @@ body,
 html {
   padding: 0;
   margin: 0;
-
+  /* width: 450px;
+  height: 600px; */
   background-color: #667481;
 }
 /* header style start 헤더 스타일 시작*/
@@ -139,6 +140,21 @@ input:focus {
   display: inline-block;
   width: 14px;
   height: 14px;
+}
+.editorRemoveBtn {
+  position: absolute;
+  top: 25px;
+  display: inline-block;
+  width: auto;
+  border: none;
+  border-radius: 30%;
+  transition: all ease 0.3s;
+}
+.editorRemoveBtn:focus {
+  border: none;
+}
+.editorRemoveBtn:active {
+  background-color: #4b4b4b48;
 }
 /* 여기까지가 라디오 및 텍스트에리어 스타일 */
 /* 풀이 추가 버튼 스타일 */
