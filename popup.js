@@ -183,6 +183,7 @@ function injection() {
   // 1번 풀이 활성화
   if (answerSelector1.checked) {
     const editText = injectTool(popup.editor1Value);
+    console.log(editText);
     return {
       text: editText,
       answer: popup.injectData.dataValue.join(","),
@@ -191,6 +192,7 @@ function injection() {
   // 2번 풀이 활성화
   else if (answerSelector2.checked) {
     const editText = injectTool(popup.editor2Value);
+    console.log(editText);
     return {
       text: editText,
       answer: popup.injectData.dataValue.join(","),

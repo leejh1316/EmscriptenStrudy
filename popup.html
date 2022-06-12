@@ -16,7 +16,11 @@
     </header>
     <div class="container">
       <div class="inputTitleWrap">
-        <input class="inputTitle" type="text" placeholder="제목입력" />
+        <input
+          class="inputTitle"
+          type="text"
+          placeholder="제목입력(구분자: '_' )"
+        />
         <div class="titleBtnsWrap">
           <button class="increment">+</button>
           <button class="decrement">-</button>
@@ -36,7 +40,7 @@
           id="injectData"
           class="inputInjectionData"
           type="text"
-          placeholder="주입할 데이터 : {c}_{d}"
+          placeholder="주입할 데이터(형식): {c},{c}_{d},{d}"
         />
       </div>
       <div id="answerDiv">
@@ -44,7 +48,7 @@
           <textarea
             id="editor1"
             class="textArea"
-            placeholder="풀이 입력"
+            placeholder="풀이 입력(주입 : {c} , {d})"
           ></textarea>
           <input
             id="editorSelect1"
